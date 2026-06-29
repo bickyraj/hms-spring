@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: app
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ims
+    username: ims
+    password: ims
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.yaml
+server:
+  port: 8084
+keycloak:
+  server-url: http://localhost:8082
+  realm: safepay
+  client-id: hms
+  admin-realm: master
+  secret: ${HMS_CLIENT_SECRET}
