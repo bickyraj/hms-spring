@@ -29,6 +29,9 @@ public class DoctorModel {
 	@Column(nullable = false)
 	private String firstName;
 
+	@Column(nullable = false)
+	private String keycloakId;
+
 	@Column
 	private String middleName;
 

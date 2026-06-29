@@ -12,8 +12,11 @@ import lombok.Setter;
 public class Doctor {
 
 	private Long id;
+	private String username;
 	private String firstName;
-	private String LastName;
+	private String keycloakId;
+	private String middleName;
+	private String lastName;
 	private String email;
 	private String address;
 	private String phone;
