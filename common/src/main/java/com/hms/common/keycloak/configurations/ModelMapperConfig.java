@@ -1,4 +1,4 @@
-package com.hms.hospital.configurations;
+package com.hms.common.keycloak.configurations;
 
 import org.modelmapper.ModelMapper;
 

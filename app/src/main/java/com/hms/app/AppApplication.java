@@ -11,11 +11,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		scanBasePackages = "com.hms"
 )
 @EnableJpaRepositories(basePackages = {
-		"com.hms.hospital.repositories"
+		"com.hms.hospital.repositories",
+		"com.hms.doctor.repositories"
 })
 @EntityScan(
 		basePackages = {
-				"com.hms.hospital.model"
+				"com.hms.hospital.model",
+				"com.hms.doctor.model",
 		}
 )
 @ConfigurationPropertiesScan
