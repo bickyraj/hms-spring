@@ -8,4 +8,5 @@ rootProject.name = 'hms'
 include 'app'
 include 'hospital'
 include 'common'
+include 'doctor'
 

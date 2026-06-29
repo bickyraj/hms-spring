@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/hospital-master.yaml
+      file: db/changelog/001-create-hospital-table.yaml
+  - include:
+      file: db/changelog/002-create-doctor-table.yaml
+  - include:
+      file: db/changelog/003-create-doctor-hospital-table.yaml
