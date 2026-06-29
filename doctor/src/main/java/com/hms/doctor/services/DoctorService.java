@@ -2,6 +2,7 @@ package com.hms.doctor.services;
 
 import com.hms.common.keycloak.KeycloakService;
 import com.hms.common.keycloak.entity.KeycloakUser;
+import com.hms.common.keycloak.exceptions.KeycloakException;
 import com.hms.doctor.entity.Doctor;
 import com.hms.doctor.repositories.DoctorRepository;
 import lombok.RequiredArgsConstructor;

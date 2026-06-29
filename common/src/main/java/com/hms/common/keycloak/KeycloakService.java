@@ -2,7 +2,9 @@ package com.hms.common.keycloak;
 
 import com.hms.common.keycloak.configurations.KeycloakProperties;
 import com.hms.common.keycloak.entity.KeycloakUser;
+import com.hms.common.keycloak.exceptions.KeycloakException;
 import com.hms.common.keycloak.valueobject.KeycloakGroupID;
+import jakarta.validation.ValidationException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.CreatedResponseUtil;
@@ -41,10 +43,15 @@ public class KeycloakService {
 		credentialRepresentation.setTemporary(false);
 		credentialRepresentation.setValue("test");
 
-		Response response = keycloak
+		try (Response response = keycloak
 				.realm(keycloakProperties.realm())
 				.users()
-				.create(userRepresentation);
-		return CreatedResponseUtil.getCreatedId(response);
+				.create(userRepresentation)) {
+			;
+			if (response.getStatus() == 409) {
+				throw new ValidationException("email already exists");
+			}
+			return CreatedResponseUtil.getCreatedId(response);
+		}
 	}
 }
