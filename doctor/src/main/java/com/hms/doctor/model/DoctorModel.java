@@ -27,7 +27,13 @@ public class DoctorModel {
 	private Long id;
 
 	@Column(nullable = false)
-	private String name;
+	private String firstName;
+
+	@Column
+	private String middleName;
+
+	@Column
+	private String lastName;
 
 	@Column(nullable = false, unique = true)
 	private String email;
