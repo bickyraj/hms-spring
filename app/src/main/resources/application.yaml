@@ -5,6 +5,11 @@ spring:
     url: jdbc:postgresql://localhost:5432/ims
     username: ims
     password: ims
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/${keycloak.realm}
   jpa:
     show-sql: true
     hibernate:
