@@ -7,6 +7,8 @@ import com.hms.doctor.repositories.JpaDoctorRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,5 +20,11 @@ public class PostgreSqlDoctorRepository implements DoctorRepository {
 	@Override
 	public void createDoctor(Doctor doctor) {
 		jpaDoctorRepository.save(modelMapper.map(doctor, DoctorModel.class));
+	}
+
+	@Override
+	public Page<Doctor> getAllDoctors(int page, int size) {
+		return jpaDoctorRepository.findAll(PageRequest.of(page, size))
+				.map(dm -> modelMapper.map(dm, Doctor.class));
 	}
 }

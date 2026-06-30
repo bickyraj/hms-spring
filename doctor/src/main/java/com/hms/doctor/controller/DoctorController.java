@@ -1,7 +1,11 @@
 package com.hms.doctor.controller;
 
+import com.hms.common.CustomPage;
 import com.hms.doctor.application.CreateDoctorUseCase;
 import com.hms.doctor.controller.request.CreateDoctorDTO;
+import com.hms.doctor.entity.Doctor;
+import com.hms.doctor.services.DoctorService;
+import com.hms.hospital.entity.Hospital;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -20,10 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class DoctorController {
 
 	private final CreateDoctorUseCase createDoctorUseCase;
+	private final DoctorService doctorService;
 
 	@GetMapping("")
 	public ResponseEntity<String> home() {
 		return ResponseEntity.ok("welcome to doctor");
+	}
+
+	@GetMapping("/list")
+	public ResponseEntity<CustomPage<Doctor>> list() {
+		return ResponseEntity.ok(CustomPage.of(doctorService.getAllDoctors(0, 10)));
 	}
 
 	@PostMapping("/create")

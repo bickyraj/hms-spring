@@ -7,6 +7,7 @@ import com.hms.doctor.entity.Doctor;
 import com.hms.doctor.repositories.DoctorRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,5 +28,9 @@ public class DoctorService {
 				.createUser(keycloakUser);
 		doctor.setKeycloakId(keycloakId);
 		doctorRepository.createDoctor(doctor);
+	}
+
+	public Page<Doctor> getAllDoctors(int page, int size) {
+		return doctorRepository.getAllDoctors(page, size);
 	}
 }
