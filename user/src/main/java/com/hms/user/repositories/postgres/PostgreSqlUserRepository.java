@@ -19,7 +19,9 @@ public class PostgreSqlUserRepository implements UserRepository {
 
 	@Override
 	public void createUser(User user) {
-		jpaUserRepository.save(modelMapper.map(user, UserModel.class));
+		UserModel userModel = modelMapper.map(user, UserModel.class);
+		userModel.setKeycloakId(user.getKeycloakUserId().getValue());
+		jpaUserRepository.save(userModel);
 	}
 
 	@Override

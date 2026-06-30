@@ -5,6 +5,7 @@ import com.hms.common.keycloak.entity.KeycloakUser;
 import com.hms.common.keycloak.valueobject.KeycloakUserId;
 import com.hms.user.entity.User;
 import com.hms.user.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -16,10 +17,11 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final KeycloakService keycloakService;
 
+	@Transactional
 	public void createUser(User user) {
 		KeycloakUser keycloakUser = KeycloakUser.builder()
 				.username(user.getUsername())
-				.firstName(user.getFirstName().concat(" ").concat(user.getMiddleName()))
+				.firstName(user.getFirstName())
 				.lastName(user.getLastName())
 				.email(user.getEmail())
 				.build();
