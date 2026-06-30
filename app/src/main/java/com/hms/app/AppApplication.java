@@ -12,7 +12,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 )
 @EnableJpaRepositories(basePackages = {
 		"com.hms.hospital.repositories",
-		"com.hms.doctor.repositories"
+		"com.hms.doctor.repositories",
+		"com.hms.user.repositories"
 })
 @EntityScan(
 		basePackages = {

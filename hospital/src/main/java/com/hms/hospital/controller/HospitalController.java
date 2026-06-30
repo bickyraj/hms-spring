@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/hospital")
 @RequiredArgsConstructor
+@Validated
 public class HospitalController {
 
 	private final HospitalService hospitalService;
@@ -31,7 +33,7 @@ public class HospitalController {
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<ApiResponse> createHospital(@RequestBody @Valid CreateHospitalDTO createHospitalDTO) {
+	public ResponseEntity<ApiResponse> createHospital(@Valid @RequestBody CreateHospitalDTO createHospitalDTO) {
 		hospitalService.createHospital(modelMapper.map(createHospitalDTO, Hospital.class));
 		return ResponseEntity.ok(ApiResponse.builder()
 				.message("hospital created").build());
