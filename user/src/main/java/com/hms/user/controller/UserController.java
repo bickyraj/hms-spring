@@ -1,6 +1,7 @@
 package com.hms.user.controller;
 
 import com.hms.common.ApiResponse;
+import com.hms.common.CustomPage;
 import com.hms.user.controller.request.CreateUserDTO;
 import com.hms.user.entity.User;
 import com.hms.user.services.UserService;
@@ -10,6 +11,7 @@ import org.modelmapper.ModelMapper;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,5 +32,10 @@ public class UserController {
 		return ResponseEntity.ok(ApiResponse.builder()
 				.message("user created successfully")
 				.build());
+	}
+
+	@GetMapping("/list")
+	public ResponseEntity<CustomPage<User>> list() {
+		return ResponseEntity.ok(CustomPage.of(userService.getAllUsers(0, 10)));
 	}
 }

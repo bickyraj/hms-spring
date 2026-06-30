@@ -8,6 +8,7 @@ import com.hms.user.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,5 +29,9 @@ public class UserService {
 		String keycloakId = keycloakService.createUser(keycloakUser);
 		user.setKeycloakUserId(KeycloakUserId.of(keycloakId));
 		userRepository.createUser(user);
+	}
+
+	public Page<User> getAllUsers(int page, int size) {
+		return userRepository.getAllUsers(page, size);
 	}
 }

@@ -25,7 +25,7 @@ public class PostgreSqlUserRepository implements UserRepository {
 	}
 
 	@Override
-	public Page<User> listUser(int page, int size) {
+	public Page<User> getAllUsers(int page, int size) {
 		return jpaUserRepository.findAll(PageRequest.of(page, size))
 				.map(um -> modelMapper.map(um, User.class));
 	}
