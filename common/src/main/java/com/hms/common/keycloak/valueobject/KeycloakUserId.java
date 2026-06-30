@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of")
-public class KeycloakGroupID {
+public class KeycloakUserId {
 	private String value;
 }

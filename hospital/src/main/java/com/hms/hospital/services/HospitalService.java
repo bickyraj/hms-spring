@@ -1,10 +1,7 @@
 package com.hms.hospital.services;
 
-import java.util.Set;
-
 import com.hms.common.keycloak.KeycloakService;
-import com.hms.common.keycloak.valueobject.KeycloakGroupID;
-import com.hms.hospital.dtos.CreateHospitalDTO;
+import com.hms.common.keycloak.valueobject.KeycloakGroupId;
 import com.hms.hospital.entity.Hospital;
 import com.hms.hospital.factories.HospitalFactory;
 import com.hms.hospital.repositories.HospitalRepository;
@@ -24,7 +21,7 @@ public class HospitalService {
 	private final ModelMapper modelMapper;
 
 	public void createHospital(Hospital hospital) {
-		KeycloakGroupID id = keycloakService.createGroup(hospital.getName());
+		KeycloakGroupId id = keycloakService.createGroup(hospital.getName());
 		hospital.setKeycloakGroupId(id);
 		hospitalFactory.createHospital(hospital);
 	}

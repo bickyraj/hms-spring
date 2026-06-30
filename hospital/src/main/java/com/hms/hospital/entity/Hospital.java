@@ -1,7 +1,7 @@
 package com.hms.hospital.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hms.common.keycloak.valueobject.KeycloakGroupID;
+import com.hms.common.keycloak.valueobject.KeycloakGroupId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Hospital {
 	private Long id;
 	@JsonIgnore
-	private KeycloakGroupID keycloakGroupId;
+	private KeycloakGroupId keycloakGroupId;
 	private String name;
 	private String address;
 	private String phone;

@@ -16,8 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 })
 @EntityScan(
 		basePackages = {
-				"com.hms.hospital.model",
-				"com.hms.doctor.model",
+				"com.hms.common.model",
 		}
 )
 @ConfigurationPropertiesScan

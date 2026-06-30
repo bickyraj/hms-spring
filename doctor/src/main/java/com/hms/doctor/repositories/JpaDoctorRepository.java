@@ -1,6 +1,6 @@
 package com.hms.doctor.repositories;
 
-import com.hms.doctor.model.DoctorModel;
+import com.hms.common.model.DoctorModel;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

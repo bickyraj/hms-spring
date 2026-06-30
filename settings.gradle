@@ -9,4 +9,5 @@ include 'app'
 include 'hospital'
 include 'common'
 include 'doctor'
+include 'user'
 

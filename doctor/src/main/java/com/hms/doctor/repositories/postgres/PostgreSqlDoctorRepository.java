@@ -1,7 +1,7 @@
 package com.hms.doctor.repositories.postgres;
 
 import com.hms.doctor.entity.Doctor;
-import com.hms.doctor.model.DoctorModel;
+import com.hms.common.model.DoctorModel;
 import com.hms.doctor.repositories.DoctorRepository;
 import com.hms.doctor.repositories.JpaDoctorRepository;
 import lombok.RequiredArgsConstructor;

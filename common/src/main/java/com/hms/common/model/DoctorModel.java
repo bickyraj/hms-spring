@@ -1,9 +1,8 @@
-package com.hms.doctor.model;
+package com.hms.common.model;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.hms.hospital.model.HospitalModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

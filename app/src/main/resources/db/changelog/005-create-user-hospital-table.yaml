@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user-hospital
+      author: bicky
+
+      changes:
+        - createTable:
+            tableName: user_hospital
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: hospital_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: user_hospital
+            columnNames: user_id, hospital_id
+            constraintName: pk_user_hospital
+
+        - addForeignKeyConstraint:
+            baseTableName: user_hospital
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_user_hospital_user
+
+        - addForeignKeyConstraint:
+            baseTableName: user_hospital
+            baseColumnNames: hospital_id
+            referencedTableName: hospitals
+            referencedColumnNames: id
+            constraintName: fk_user_hospital_hospital

@@ -1,11 +1,8 @@
 package com.hms.hospital.repositories.postgres;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.hms.hospital.entity.Hospital;
 import lombok.RequiredArgsConstructor;
-import com.hms.hospital.model.HospitalModel;
+import com.hms.common.model.HospitalModel;
 import org.modelmapper.ModelMapper;
 import com.hms.hospital.repositories.HospitalRepository;
 import com.hms.hospital.repositories.JpaHospitalRepository;

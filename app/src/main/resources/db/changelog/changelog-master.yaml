@@ -5,3 +5,7 @@ databaseChangeLog:
       file: db/changelog/002-create-doctor-table.yaml
   - include:
       file: db/changelog/003-create-doctor-hospital-table.yaml
+  - include:
+      file: db/changelog/004-create-user-table.yaml
+  - include:
+      file: db/changelog/005-create-user-hospital-table.yaml

@@ -1,6 +1,6 @@
 package com.hms.hospital.repositories;
 
-import com.hms.hospital.model.HospitalModel;
+import com.hms.common.model.HospitalModel;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

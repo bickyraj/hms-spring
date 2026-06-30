@@ -1,8 +1,5 @@
 package com.hms.hospital.repositories;
 
-import java.awt.print.Pageable;
-import java.util.Set;
-
 import com.hms.hospital.entity.Hospital;
 
 import org.springframework.data.domain.Page;

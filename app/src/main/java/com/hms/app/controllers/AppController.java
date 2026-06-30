@@ -1,6 +1,5 @@
 package com.hms.app.controllers;
 
-import com.hms.hospital.api.HospitalApi;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Validated
 public class AppController {
-	private final HospitalApi hospitalApi;
 
 	@GetMapping("/home")
 	public ResponseEntity<String> home() {
