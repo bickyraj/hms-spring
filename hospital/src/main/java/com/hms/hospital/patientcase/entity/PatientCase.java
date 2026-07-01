@@ -1,5 +1,6 @@
 package com.hms.hospital.patientcase.entity;
 
+import com.hms.common.constants.PatientCaseStatus;
 import com.hms.common.valueobject.PatientId;
 import com.hms.hospital.entity.Hospital;
 import lombok.AllArgsConstructor;
@@ -19,5 +20,8 @@ public class PatientCase {
 
 	private Long id;
 	private PatientId patientId;
+	private String name;
 	private Hospital hospital;
+	private PatientCaseStatus status;
+
 }

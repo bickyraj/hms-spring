@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(
@@ -13,11 +12,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = {
 		"com.hms.hospital.repositories",
 		"com.hms.doctor.repositories",
-		"com.hms.user.repositories"
+		"com.hms.user.repositories",
+		"com.hms.hospital.patientcase.repositories",
 })
 @EntityScan(
 		basePackages = {
 				"com.hms.common.model",
+				"com.hms.hospital.patientcase.model",
 		}
 )
 @ConfigurationPropertiesScan
