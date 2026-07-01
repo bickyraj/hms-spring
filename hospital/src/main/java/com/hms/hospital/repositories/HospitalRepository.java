@@ -1,5 +1,7 @@
 package com.hms.hospital.repositories;
 
+import java.util.Optional;
+
 import com.hms.hospital.entity.Hospital;
 
 import org.springframework.data.domain.Page;
@@ -10,4 +12,5 @@ public interface HospitalRepository {
 
 	void createHospital(Hospital hospital);
 	Page<Hospital> getAll(int page, int size);
+	Optional<Hospital> getById(Long id);
 }

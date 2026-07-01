@@ -1,5 +1,7 @@
 package com.hms.hospital.repositories.postgres;
 
+import java.util.Optional;
+
 import com.hms.hospital.entity.Hospital;
 import lombok.RequiredArgsConstructor;
 import com.hms.common.model.HospitalModel;
@@ -30,5 +32,11 @@ public class PostgreSqlHospitalRepository implements HospitalRepository {
 		Pageable pageable = PageRequest.of(page, size);
 		return jpaHospitalRepository.findAll(pageable)
 				.map(hm -> modelMapper.map(hm, Hospital.class));
+	}
+
+	@Override
+	public Optional<Hospital> getById(Long id) {
+		return jpaHospitalRepository.findById(id).map(hospitalModel -> modelMapper
+				.map(hospitalModel, Hospital.class));
 	}
 }

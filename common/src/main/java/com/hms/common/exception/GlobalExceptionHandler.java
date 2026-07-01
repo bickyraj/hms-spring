@@ -36,7 +36,14 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(ValidationException.class)
-	public ResponseEntity<ApiResponse> handleKeycloakException(ValidationException ex) {
+	public ResponseEntity<ApiResponse> handleValidationException(ValidationException ex) {
+		return ResponseEntity.status(400).body(
+				ApiResponse.builder().message(ex.getMessage()).build()
+		);
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ApiResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
 		return ResponseEntity.status(400).body(
 				ApiResponse.builder().message(ex.getMessage()).build()
 		);

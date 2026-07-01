@@ -1,5 +1,7 @@
 package com.hms.user.repositories;
 
+import java.util.List;
+
 import com.hms.user.entity.User;
 
 import org.springframework.data.domain.Page;

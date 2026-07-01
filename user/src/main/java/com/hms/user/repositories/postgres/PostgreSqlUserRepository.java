@@ -1,5 +1,7 @@
 package com.hms.user.repositories.postgres;
 
+import java.util.List;
+
 import com.hms.common.model.UserModel;
 import com.hms.user.entity.User;
 import com.hms.user.repositories.JpaUserRepository;

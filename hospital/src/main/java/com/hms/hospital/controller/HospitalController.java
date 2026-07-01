@@ -10,12 +10,15 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,5 +40,23 @@ public class HospitalController {
 		hospitalService.createHospital(modelMapper.map(createHospitalDTO, Hospital.class));
 		return ResponseEntity.ok(ApiResponse.builder()
 				.message("hospital created").build());
+	}
+
+	@GetMapping("/{hospitalId}")
+	public ResponseEntity<ApiResponse> getHospitalDetail(@PathVariable Long hospitalId) {
+		return ResponseEntity.ok(ApiResponse.builder()
+				.data(hospitalService.getHospitalById(hospitalId))
+				.message("hospital retrieved")
+				.status(true)
+				.build());
+	}
+
+	@GetMapping("/{hospitalId}/users")
+	public ResponseEntity<ApiResponse> getHospitalUsers(@PathVariable Long hospitalId) {
+		return ResponseEntity.ok(ApiResponse.builder()
+				.data(hospitalService.getHospitalUsers(hospitalId))
+				.message("hospital users retrieved")
+				.status(true)
+				.build());
 	}
 }
