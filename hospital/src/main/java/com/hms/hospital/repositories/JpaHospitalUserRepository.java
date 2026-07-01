@@ -23,7 +23,7 @@ public interface JpaHospitalUserRepository extends JpaRepository<UserModel, Long
 	@Query(value = "SELECT u.* FROM users u " +
 			"WHERE NOT EXISTS (" +
 			"  SELECT 1 FROM user_hospital uh " +
-			"  WHERE uh.user_id = u.id AND uh.hospital_id = :hospitalId" +
+			"  WHERE uh.user_id = u.id" +
 			")",
 			nativeQuery = true)
 	List<UserModel> findAllNotInHospital(@Param("hospitalId") Long hospitalId);
