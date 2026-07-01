@@ -2,6 +2,7 @@ package com.hms.hospital.repositories.postgres;
 
 import java.util.Optional;
 
+import com.hms.common.keycloak.valueobject.KeycloakGroupId;
 import com.hms.hospital.entity.Hospital;
 import lombok.RequiredArgsConstructor;
 import com.hms.common.model.HospitalModel;
@@ -36,7 +37,10 @@ public class PostgreSqlHospitalRepository implements HospitalRepository {
 
 	@Override
 	public Optional<Hospital> getById(Long id) {
-		return jpaHospitalRepository.findById(id).map(hospitalModel -> modelMapper
-				.map(hospitalModel, Hospital.class));
+		return jpaHospitalRepository.findById(id).map(hospitalModel -> {
+			Hospital hospital = modelMapper.map(hospitalModel, Hospital.class);
+			hospital.setKeycloakGroupId(KeycloakGroupId.of(hospitalModel.getKeycloakGroupId()));
+			return hospital;
+		});
 	}
 }

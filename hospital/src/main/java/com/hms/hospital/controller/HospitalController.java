@@ -2,6 +2,8 @@ package com.hms.hospital.controller;
 
 import com.hms.common.ApiResponse;
 import com.hms.common.CustomPage;
+import com.hms.common.constants.HospitalRole;
+import com.hms.hospital.api.dtos.UserIdWithRoleDTO;
 import com.hms.hospital.dtos.CreateHospitalDTO;
 import com.hms.hospital.entity.Hospital;
 import com.hms.hospital.entity.User;
@@ -10,8 +12,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -55,5 +54,26 @@ public class HospitalController {
 	@GetMapping("/{hospitalId}/staffs")
 	public ResponseEntity<CustomPage<User>> getHospitalUsers(@PathVariable Long hospitalId) {
 		return ResponseEntity.ok(CustomPage.of(hospitalService.getHospitalUsers(hospitalId)));
+	}
+
+	@GetMapping("/{hospitalId}/staffs/not-in-hospital")
+	public ResponseEntity<ApiResponse> getUsersNotInHospital(@PathVariable Long hospitalId) {
+		return ResponseEntity.ok(ApiResponse.builder()
+				.data(hospitalService.getUsersNotInHospital(hospitalId))
+				.message("users not in hospital retrieved")
+				.status(true)
+				.build());
+	}
+
+	@PostMapping("/{hospitalId}/staffs/add")
+	public ResponseEntity<ApiResponse> addUsersWithRoleToHospital(@RequestBody UserIdWithRoleDTO userIdWithRoleDTO,
+																  @PathVariable Long hospitalId) {
+		hospitalService.addUsersWithRoleToHospital(userIdWithRoleDTO.userIds(),
+				hospitalId, HospitalRole.valueOf(userIdWithRoleDTO.role()));
+		return ResponseEntity.ok(ApiResponse.builder()
+				.message("users added to hospital")
+				.status(true)
+				.build());
+
 	}
 }

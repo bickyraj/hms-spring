@@ -2,8 +2,10 @@ package com.hms.hospital.services;
 
 import java.util.List;
 
+import com.hms.common.constants.HospitalRole;
 import com.hms.common.keycloak.KeycloakService;
 import com.hms.common.keycloak.valueobject.KeycloakGroupId;
+import com.hms.common.keycloak.valueobject.KeycloakUserId;
 import com.hms.hospital.entity.Hospital;
 import com.hms.hospital.entity.User;
 import com.hms.hospital.factories.HospitalFactory;
@@ -42,5 +44,20 @@ public class HospitalService {
 
 	public Page<User> getHospitalUsers(Long hospitalId) {
 		return postgreSqlHospitalUserRepository.getUsersByHospitalId(hospitalId);
+	}
+
+	public List<User> getUsersNotInHospital(Long hospitalId) {
+		return postgreSqlHospitalUserRepository.getUsersNotInHospital(hospitalId);
+	}
+
+	public void addUsersWithRoleToHospital(List<Long> userIds, Long hospitalId, HospitalRole role) {
+		Hospital hospital = getHospitalById(hospitalId);
+		List<KeycloakUserId> keycloakUserIds = postgreSqlHospitalUserRepository
+				.getAllUsersByIds(userIds)
+				.stream()
+				.map(User::getKeycloakUserId)
+				.toList();
+		keycloakService.addUsersToGroup(keycloakUserIds, hospital.getKeycloakGroupId(), role.getValue());
+		postgreSqlHospitalUserRepository.addUsersToHospital(userIds, hospitalId);
 	}
 }
