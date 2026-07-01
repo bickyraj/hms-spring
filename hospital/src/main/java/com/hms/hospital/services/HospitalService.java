@@ -40,7 +40,7 @@ public class HospitalService {
 				new IllegalArgumentException("hospital not found"));
 	}
 
-	public List<User> getHospitalUsers(Long hospitalId) {
+	public Page<User> getHospitalUsers(Long hospitalId) {
 		return postgreSqlHospitalUserRepository.getUsersByHospitalId(hospitalId);
 	}
 }

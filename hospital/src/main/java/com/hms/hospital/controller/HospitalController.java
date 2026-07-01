@@ -4,6 +4,7 @@ import com.hms.common.ApiResponse;
 import com.hms.common.CustomPage;
 import com.hms.hospital.dtos.CreateHospitalDTO;
 import com.hms.hospital.entity.Hospital;
+import com.hms.hospital.entity.User;
 import com.hms.hospital.services.HospitalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -51,12 +52,8 @@ public class HospitalController {
 				.build());
 	}
 
-	@GetMapping("/{hospitalId}/users")
-	public ResponseEntity<ApiResponse> getHospitalUsers(@PathVariable Long hospitalId) {
-		return ResponseEntity.ok(ApiResponse.builder()
-				.data(hospitalService.getHospitalUsers(hospitalId))
-				.message("hospital users retrieved")
-				.status(true)
-				.build());
+	@GetMapping("/{hospitalId}/staffs")
+	public ResponseEntity<CustomPage<User>> getHospitalUsers(@PathVariable Long hospitalId) {
+		return ResponseEntity.ok(CustomPage.of(hospitalService.getHospitalUsers(hospitalId)));
 	}
 }

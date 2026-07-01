@@ -7,6 +7,8 @@ import com.hms.hospital.repositories.JpaHospitalUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,10 +17,8 @@ public class PostgreSqlHospitalUserRepository {
 	private final JpaHospitalUserRepository jpaHospitalUserRepository;
 	private final ModelMapper modelMapper;
 
-	public List<User> getUsersByHospitalId(Long hospitalId) {
-		return jpaHospitalUserRepository.findAllByHospitalId(hospitalId)
-				.stream()
-				.map(userModel -> modelMapper.map(userModel, User.class))
-				.toList();
+	public Page<User> getUsersByHospitalId(Long hospitalId) {
+		return jpaHospitalUserRepository.findAllByHospitalId(hospitalId, PageRequest.of(0, 10))
+				.map(userModel -> modelMapper.map(userModel, User.class));
 	}
 }
