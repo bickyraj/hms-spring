@@ -9,3 +9,7 @@ databaseChangeLog:
       file: db/changelog/004-create-user-table.yaml
   - include:
       file: db/changelog/005-create-user-hospital-table.yaml
+  - include:
+      file: db/changelog/006-create-patient-case-table.yaml
+  - include:
+      file: db/changelog/007-create-patient-case-document-table.yaml
