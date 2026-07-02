@@ -1,4 +1,9 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB      # per-chunk size limit — set based on your chosen chunk size
+      max-request-size: 50MB
+      file-size-threshold: 5MB
   application:
     name: app
   datasource:
@@ -27,3 +32,5 @@ keycloak:
   client-id: hms
   admin-realm: master
   secret: ${HMS_CLIENT_SECRET}
+file:
+  upload-dir: uploads

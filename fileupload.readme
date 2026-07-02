@@ -1,0 +1,164 @@
+1. User fills form + selects file (in Angular, file stays in browser memory/disk, NOT sent yet)
+2. User clicks Submit
+3. Angular → Spring: "I want to upload a file called mri-scan.dcm, 1GB, for patient case #5"
+   Spring creates the PatientCaseDocument row (status: PENDING),
+   generates presigned URL(s), returns them to Angular
+4. Angular uploads the file DIRECTLY to S3 using the presigned URL(s), in chunks (multipart upload)
+5. Once all chunks uploaded, Angular tells Spring "upload complete"
+   Spring finalizes the S3 multipart upload, updates status to UPLOADED
+
+   @Service
+   public class S3UploadService {
+
+       private final S3Client s3Client;
+       private static final long PART_SIZE = 10 * 1024 * 1024; // 10MB per chunk
+
+       public InitiateUploadResponse initiateMultipartUpload(String key, String contentType, long fileSize) {
+           CreateMultipartUploadRequest createRequest = CreateMultipartUploadRequest.builder()
+               .bucket(bucketName)
+               .key(key)
+               .contentType(contentType)
+               .build();
+
+           CreateMultipartUploadResponse response = s3Client.createMultipartUpload(createRequest);
+           String uploadId = response.uploadId();
+
+           int totalParts = (int) Math.ceil((double) fileSize / PART_SIZE);
+           List<PresignedPartUrl> presignedUrls = new ArrayList<>();
+
+           for (int partNumber = 1; partNumber <= totalParts; partNumber++) {
+               UploadPartRequest partRequest = UploadPartRequest.builder()
+                   .bucket(bucketName)
+                   .key(key)
+                   .uploadId(uploadId)
+                   .partNumber(partNumber)
+                   .build();
+
+               PresignedUploadPartRequest presignRequest = s3Presigner.presignUploadPart(
+                   builder -> builder
+                       .signatureDuration(Duration.ofHours(2))
+                       .uploadPartRequest(partRequest)
+               );
+
+               presignedUrls.add(new PresignedPartUrl(partNumber, presignRequest.url().toString()));
+           }
+
+           return new InitiateUploadResponse(uploadId, key, presignedUrls);
+       }
+
+       public void completeMultipartUpload(String key, String uploadId, List<CompletedPartInfo> parts) {
+           List<CompletedPart> completedParts = parts.stream()
+               .map(p -> CompletedPart.builder()
+                   .partNumber(p.partNumber())
+                   .eTag(p.eTag())
+                   .build())
+               .toList();
+
+           CompleteMultipartUploadRequest completeRequest = CompleteMultipartUploadRequest.builder()
+               .bucket(bucketName)
+               .key(key)
+               .uploadId(uploadId)
+               .multipartUpload(CompletedMultipartUpload.builder().parts(completedParts).build())
+               .build();
+
+           s3Client.completeMultipartUpload(completeRequest);
+       }
+   }
+
+   @PostMapping("/patient-cases/{caseId}/documents/initiate-upload")
+   public InitiateUploadResponse initiateUpload(
+       @PathVariable Long caseId,
+       @RequestBody InitiateUploadRequest request) {
+
+       String s3Key = "patient-cases/" + caseId + "/" + UUID.randomUUID() + "-" + request.fileName();
+
+       // Create PENDING document row
+       PatientCaseDocument doc = new PatientCaseDocument();
+       doc.setPatientCaseId(caseId);
+       doc.setDocumentName(request.fileName());
+       doc.setS3Key(s3Key);
+       doc.setS3Bucket(bucketName);
+       doc.setContentType(request.contentType());
+       doc.setFileSizeBytes(request.fileSize());
+       doc.setStatus("PENDING");
+       documentRepository.save(doc);
+
+       return s3UploadService.initiateMultipartUpload(s3Key, request.contentType(), request.fileSize());
+   }
+
+   @PostMapping("/patient-cases/{caseId}/documents/{documentId}/complete-upload")
+   public void completeUpload(
+       @PathVariable Long documentId,
+       @RequestBody CompleteUploadRequest request) {
+
+       PatientCaseDocument doc = documentRepository.findById(documentId)
+           .orElseThrow(() -> new EntityNotFoundException("Document not found"));
+
+       s3UploadService.completeMultipartUpload(doc.getS3Key(), request.uploadId(), request.parts());
+
+       doc.setStatus("UPLOADED");
+       documentRepository.save(doc);
+   }
+
+   #Angular
+
+   async uploadFileInChunks(file: File, caseId: number): Promise<void> {
+     const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB, must match backend PART_SIZE
+
+     // 1. Ask backend to initiate multipart upload
+     const initResponse = await firstValueFrom(
+       this.http.post<InitiateUploadResponse>(
+         `/api/patient-cases/${caseId}/documents/initiate-upload`,
+         {
+           fileName: file.name,
+           contentType: file.type,
+           fileSize: file.size
+         }
+       )
+     );
+
+     const { uploadId, s3Key, presignedUrls, documentId } = initResponse;
+     const completedParts: { partNumber: number; eTag: string }[] = [];
+
+     // 2. Upload each chunk directly to S3 using presigned URLs
+     for (const { partNumber, url } of presignedUrls) {
+       const start = (partNumber - 1) * CHUNK_SIZE;
+       const end = Math.min(start + CHUNK_SIZE, file.size);
+       const chunk = file.slice(start, end);
+
+       const response = await fetch(url, {
+         method: 'PUT',
+         body: chunk
+       });
+
+       const eTag = response.headers.get('ETag')!;
+       completedParts.push({ partNumber, eTag });
+
+       // optional: emit progress event here
+       this.uploadProgress.set(Math.round((partNumber / presignedUrls.length) * 100));
+     }
+
+     // 3. Tell backend the upload is complete
+     await firstValueFrom(
+       this.http.post(
+         `/api/patient-cases/${caseId}/documents/${documentId}/complete-upload`,
+         { uploadId, parts: completedParts }
+       )
+     );
+   }
+
+   writing it to your form submit
+
+   async onSubmit(): Promise<void> {
+     // 1. Create the patient case first (metadata only, fast)
+     const patientCase = await firstValueFrom(
+       this.patientCaseService.create(this.form.value)
+     );
+
+     // 2. Then upload the file(s) separately, in chunks, against that case
+     if (this.selectedFile) {
+       await this.uploadFileInChunks(this.selectedFile, patientCase.id);
+     }
+
+     // 3. Done — navigate away, show success, etc.
+   }

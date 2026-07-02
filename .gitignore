@@ -70,3 +70,5 @@ replay_pid*
 # Compiled output per module
 **/build/
 **/out/
+
+uploads

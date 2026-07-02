@@ -1,5 +1,7 @@
 package com.hms.hospital.patientcase.entity;
 
+import java.util.List;
+
 import com.hms.common.constants.PatientCaseStatus;
 import com.hms.common.valueobject.PatientId;
 import com.hms.hospital.entity.Hospital;
@@ -23,5 +25,5 @@ public class PatientCase {
 	private String name;
 	private Hospital hospital;
 	private PatientCaseStatus status;
-
+	private List<PatientCaseDocument> patientCaseDocuments;
 }
