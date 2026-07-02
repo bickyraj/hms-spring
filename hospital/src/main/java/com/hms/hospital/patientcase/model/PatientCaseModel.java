@@ -9,6 +9,8 @@ import com.hms.common.model.HospitalModel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -41,6 +43,7 @@ public class PatientCaseModel {
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
 	private PatientCaseStatus status;
 
@@ -48,7 +51,7 @@ public class PatientCaseModel {
 	private LocalDateTime updatedAt;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "hospital_id", insertable = false, updatable = false)
+	@JoinColumn(name = "hospital_id", nullable = false)
 	private HospitalModel hospital;
 
 	@OneToMany(

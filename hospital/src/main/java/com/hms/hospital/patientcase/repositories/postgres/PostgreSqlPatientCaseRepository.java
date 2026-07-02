@@ -1,5 +1,6 @@
 package com.hms.hospital.patientcase.repositories.postgres;
 
+import com.hms.common.model.HospitalModel;
 import com.hms.hospital.patientcase.entity.PatientCase;
 import com.hms.hospital.patientcase.model.PatientCaseModel;
 import com.hms.hospital.patientcase.repositories.JpaPatientCaseRepository;
@@ -19,9 +20,11 @@ public class PostgreSqlPatientCaseRepository implements PatientCaseRepository {
 
 	@Override
 	public void upsert(PatientCase patientCase) {
-		jpaPatientCaseRepository.save(
-				modelMapper.map(patientCase, PatientCaseModel.class)
-		);
+		PatientCaseModel patientCaseModel = modelMapper.map(patientCase, PatientCaseModel.class);
+		patientCaseModel.setPatientId(patientCase.getPatientId().getValue());
+		HospitalModel hospitalModel = modelMapper.map(patientCase.getHospital(), HospitalModel.class);
+		patientCaseModel.setHospital(hospitalModel);
+		jpaPatientCaseRepository.save(patientCaseModel);
 	}
 
 	@Override

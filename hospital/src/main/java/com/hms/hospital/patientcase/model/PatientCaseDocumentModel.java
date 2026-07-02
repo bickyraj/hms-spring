@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import com.hms.common.constants.DocumentUploadStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,6 +45,7 @@ public class PatientCaseDocumentModel {
 	private Long fileSizeBytes;
 
 	@Column(name = "status", length = 50, nullable = false)
+	@Enumerated(EnumType.STRING)
 	private DocumentUploadStatus status = DocumentUploadStatus.PENDING;
 
 	@Column(name = "uploaded_by", length = 36)
