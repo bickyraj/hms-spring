@@ -5,6 +5,6 @@ import org.springframework.data.domain.Page;
 
 public interface PatientCaseRepository {
 
-	void upsert(PatientCase patientCase);
+	PatientCase upsert(PatientCase patientCase);
 	Page<PatientCase> getAll(int page, int size);
 }

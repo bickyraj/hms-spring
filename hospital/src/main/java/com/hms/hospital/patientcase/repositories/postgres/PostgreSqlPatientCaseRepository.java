@@ -19,12 +19,12 @@ public class PostgreSqlPatientCaseRepository implements PatientCaseRepository {
 	private final ModelMapper modelMapper;
 
 	@Override
-	public void upsert(PatientCase patientCase) {
+	public PatientCase upsert(PatientCase patientCase) {
 		PatientCaseModel patientCaseModel = modelMapper.map(patientCase, PatientCaseModel.class);
 		patientCaseModel.setPatientId(patientCase.getPatientId().getValue());
 		HospitalModel hospitalModel = modelMapper.map(patientCase.getHospital(), HospitalModel.class);
 		patientCaseModel.setHospital(hospitalModel);
-		jpaPatientCaseRepository.save(patientCaseModel);
+		return modelMapper.map(jpaPatientCaseRepository.save(patientCaseModel), PatientCase.class);
 	}
 
 	@Override

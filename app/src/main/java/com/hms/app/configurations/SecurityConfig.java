@@ -20,21 +20,21 @@ public class SecurityConfig {
 		http
 				.csrf(CsrfConfigurer::disable)
 				.cors(CorsConfigurer::disable)
-//				.oauth2ResourceServer(oauth2 -> {
-//					oauth2.jwt(jwtConfigurer -> jwtConfigurer
-//							.jwtAuthenticationConverter(jwtAuthenticationConverter()));
-//				})
+				.oauth2ResourceServer(oauth2 -> {
+					oauth2.jwt(jwtConfigurer -> jwtConfigurer
+							.jwtAuthenticationConverter(jwtAuthenticationConverter()));
+				})
 				.authorizeHttpRequests((authorize) -> {
-					authorize.anyRequest().permitAll();
+					authorize.anyRequest().hasRole("HOSPITAL_ADMIN");
 				});
 
 		return http.build();
 	}
 
-//	@Bean
-//	public JwtAuthenticationConverter jwtAuthenticationConverter() {
-//		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-//		converter.setJwtGrantedAuthoritiesConverter(new KeycloakAuthenticationConverter());
-//		return converter;
-//	}
+	@Bean
+	public JwtAuthenticationConverter jwtAuthenticationConverter() {
+		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+		converter.setJwtGrantedAuthoritiesConverter(new KeycloakAuthenticationConverter());
+		return converter;
+	}
 }

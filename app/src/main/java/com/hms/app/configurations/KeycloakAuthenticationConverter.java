@@ -20,21 +20,17 @@ public class KeycloakAuthenticationConverter implements Converter<Jwt, Collectio
 
 	@Override
 	public Collection<GrantedAuthority> convert(Jwt jwt) {
-		ObjectMapper mapper = new ObjectMapper();
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		Map<String, Object> resourceAccess = jwt.getClaimAsMap("resource_access");
-		if (resourceAccess == null || resourceAccess.isEmpty()) {
+
+		Map<String, Object> realmAccess = jwt.getClaimAsMap("realm_access");
+
+		if (realmAccess == null || realmAccess.isEmpty()) {
 			return authorities;
 		}
 
 		@SuppressWarnings("unchecked")
-		Map<String, Object> clientResource = (Map<String, Object>) resourceAccess.get(clientId);
-		if (clientResource == null) {
-			return authorities;
-		}
+		List<String> roles = (List<String>) realmAccess.get("roles");
 
-		@SuppressWarnings("unchecked")
-		List<String> roles = (List<String>) clientResource.get("roles");
 		if (roles == null) {
 			return authorities;
 		}

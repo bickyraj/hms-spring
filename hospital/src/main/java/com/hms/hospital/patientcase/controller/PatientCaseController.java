@@ -45,20 +45,17 @@ public class PatientCaseController {
 		));
 	}
 
-	@PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Boolean> createPatientCase(
-			@Valid @ModelAttribute("data") CreatePatientCaseRequestDTO patientCaseRequestDTO,
-			@Nullable @RequestPart("file") MultipartFile file) {
+	@PostMapping(value = "/create")
+	public ResponseEntity<Long> createPatientCase(
+			@Valid @RequestBody CreatePatientCaseRequestDTO patientCaseRequestDTO) {
 
 		CreatePatientCaseUseCase.Response response = createPatientCaseUseCase.execute(
 				CreatePatientCaseUseCase.Request.of(
 						patientCaseRequestDTO.patientId(),
-						patientCaseRequestDTO.name(),
-						patientCaseRequestDTO.hospitalId(),
-						file
+						patientCaseRequestDTO.name()
 				)
 		);
-		return ResponseEntity.ok(response.isSuccess());
+		return ResponseEntity.ok(response.getCaseId());
 	}
 
 	@PostMapping("/{caseId}/documents/upload-chunk")

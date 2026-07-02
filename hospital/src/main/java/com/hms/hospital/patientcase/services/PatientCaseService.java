@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 public class PatientCaseService {
 	private final PatientCaseRepository patientCaseRepository;
 	private final HospitalRepository hospitalRepository;
-	public void savePatientCase(PatientCase patientCase, Long hospitalId) {
+	public PatientCase savePatientCase(PatientCase patientCase, Long hospitalId) {
 		Hospital hospital = hospitalRepository.getById(hospitalId)
 				.orElseThrow(() -> new IllegalArgumentException("Hospital not found with id: " + hospitalId));
 		patientCase.setHospital(hospital);
-		patientCaseRepository.upsert(patientCase);
+		return patientCaseRepository.upsert(patientCase);
 	}
 
 	public Page<PatientCase> getAllPatientCases(int page, int size) {
